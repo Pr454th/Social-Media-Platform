@@ -3,13 +3,22 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const fileUpload = require("express-fileupload");
 require("dotenv").config();
 
 // Import Routes
 const router = require("./routes/postRoutes");
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(fileUpload());
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
 app.use("/api/posts", router);
 
 console.log(process.env.MONGO_URI);
