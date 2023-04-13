@@ -14,6 +14,10 @@ const PostSchema = new Schema({
     type: Buffer,
     required: true,
   },
+  artist: {
+    type: String,
+    required: true,
+  },
 });
 
 const Post = mongoose.model("Post", PostSchema);

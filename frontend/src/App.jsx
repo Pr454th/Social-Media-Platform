@@ -1,13 +1,21 @@
 import React from "react";
-import Home from "./pages/Home";
-import Post from "./pages/Post";
-// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import PostView from "./pages/PostView";
+import PostForm from "./pages/PostForm";
+import Posts from "./pages/Posts";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
 
 export default function App() {
   return (
     <div className="md:container md:mx-auto dark:bg-dark">
-      <Home />
-      {/* <Post /> */}
+      <Navbar />
+      <Router>
+        <Routes>
+          <Route path="/postit" element={<PostForm />} />
+          <Route path="/posts" element={<Posts />} />
+          <Route path="/posts/:id" element={<PostView />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

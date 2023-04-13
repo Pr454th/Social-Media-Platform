@@ -1,8 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
-export default function Home() {
+export default function Posts() {
   const [imageData, setImageData] = useState(null);
 
   useEffect(() => {
@@ -28,24 +29,26 @@ export default function Home() {
   }, []);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-8">
-      <div className="card p-4 bg-white rounded-lg shadow-md drop-shadow-2xl bg-white dark:bg-black dark:text-white border-2 border-rose-400 ">
-        <img
-          className="w-full h-48 object-cover mb-4"
-          src={imageData}
-          alt="Card 4"
-        />
-        <h2 className="text-xl font-bold mb-2">Card 1</h2>
-        <p className="text-gray-700 text-base dark:text-cyan-400">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec augue
-          id lectus molestie elementum.Lorem ipsum dolor sit amet, consectetur
-          adipiscing elit. Sed nec augue id lectus molestie elementum.Lorem
-          ipsum dolor sit amet, consectetur adipiscing elit. Sed nec augue id
-          lectus molestie elementum.Lorem ipsum dolor sit amet, consectetur
-          adipiscing elit. Sed nec augue id lectus molestie elementum.Lorem
-          ipsum dolor sit amet, consectetur adipiscing elit. Sed nec augue id
-          lectus molestie elementum.
-        </p>
-      </div>
+      <Link to="/posts/id">
+        <div className="card p-4 bg-white rounded-lg shadow-md drop-shadow-2xl bg-white dark:bg-black dark:text-white border-2 border-rose-400 ">
+          <img
+            className="w-full h-48 object-cover mb-4"
+            src={imageData}
+            alt="Card 4"
+          />
+          <h2 className="text-xl font-bold mb-2">Card 1</h2>
+          <p className="text-gray-700 text-base dark:text-cyan-400">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec
+            augue id lectus molestie elementum.Lorem ipsum dolor sit amet,
+            consectetur adipiscing elit. Sed nec augue id lectus molestie
+            elementum.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Sed nec augue id lectus molestie elementum.Lorem ipsum dolor sit
+            amet, consectetur adipiscing elit. Sed nec augue id lectus molestie
+            elementum.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Sed nec augue id lectus molestie elementum.
+          </p>
+        </div>
+      </Link>
       <div className="card p-4 bg-white rounded-lg shadow-md drop-shadow-2xl bg-white dark:bg-black dark:text-white border-2 border-rose-400 ">
         <img
           className="w-full h-48 object-cover mb-4"
