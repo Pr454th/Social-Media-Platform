@@ -1,5 +1,5 @@
 const Post = require("../models/Post");
-const fs = require("fs");
+const User = require("../models/User");
 const Buffer = require("buffer").Buffer;
 
 const savePost = async (req, res) => {
@@ -15,6 +15,10 @@ const savePost = async (req, res) => {
   });
   try {
     const savedPost = await post.save();
+    await User.updateOne(
+      { artistname: artist },
+      { $push: { posts: savedPost._id } }
+    );
     res.json(savedPost);
   } catch (err) {
     res.json({ message: err });
@@ -23,7 +27,7 @@ const savePost = async (req, res) => {
 
 const getPost = async (req, res) => {
   try {
-    const post = await Post.findOne({ title: req.params.id });
+    const post = await Post.findOne({ _id: req.params.id });
 
     if (!post) {
       return res.status(404).json({ message: "Image not found" });

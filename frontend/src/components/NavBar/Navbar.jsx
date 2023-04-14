@@ -1,12 +1,26 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useState } from "react";
-import { FaHome, FaPlus, FaList, FaImages } from "react-icons/fa";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaHome, FaPlus, FaImages } from "react-icons/fa";
+import { FiLogOut, FiLogIn } from "react-icons/fi";
+import AuthContext from "../../auth/authContext";
 
-export default function Navbar() {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const { token, setToken } = useContext(AuthContext);
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setToken(null);
+    navigate("/login");
   };
 
   return (
@@ -14,35 +28,63 @@ export default function Navbar() {
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <a href="/" className="text-white font-bold">
+            <Link to="/" className="text-white font-bold">
               <h1 className="text-2xl font-bold text-transparent bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text">
                 Artistic Hub
               </h1>
-            </a>
+            </Link>
           </div>
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-4">
-              <a
-                href="/"
+              <Link
+                to="/"
                 className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
               >
                 <FaHome className="text-white h-6 w-6" />
                 <span className="ml-2">Home</span>
-              </a>
-              <a
-                href="/postit"
+              </Link>
+              <Link
+                to="/postit"
                 className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
               >
                 <FaPlus className="text-white h-6 w-6" />
                 <span className="ml-2">Create</span>
-              </a>
-              <a
-                href="/posts"
+              </Link>
+              <Link
+                to="/posts"
                 className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
               >
                 <FaImages className="text-white h-6 w-6" />
                 <span className="ml-2">Posts</span>
-              </a>
+              </Link>
+              {token ? (
+                <>
+                  <Link
+                    to={`/profile/${localStorage.getItem("user")}`}
+                    className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
+                  >
+                    <FaImages className="text-white h-6 w-6" />
+                    <span className="ml-2">Profile</span>
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="inline-flex items-center px-4 py-2 text-base font-medium text-white uppercase dark:bg-red-500
+                  rounded-lg hover:bg-red-600
+                  focus:outline-none"
+                  >
+                    <FiLogOut className="mr-2" />
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  className="inline-flex items-center px-4 py-2 text-base font-medium text-white dark:bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none "
+                >
+                  <FiLogIn className="mr-2" />
+                  Login
+                </Link>
+              )}
             </div>
           </div>
           <div className="-mr-2 flex md:hidden">
@@ -79,29 +121,50 @@ export default function Navbar() {
       </div>
       <div className={`${isOpen ? "block" : "hidden"} md:hidden`}>
         <div className="px-2 pt-2 pb-3 sm:px-3">
-          <a
-            href="/"
+          <Link
+            to="/"
             className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
           >
             <FaHome className="text-white h-6 w-6" />
             <span className="ml-2">Home</span>
-          </a>
-          <a
-            href="/postit"
+          </Link>
+          <Link
+            to="/postit"
             className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
           >
             <FaPlus className="text-white h-6 w-6" />
             <span className="ml-2">Create</span>
-          </a>
-          <a
-            href="/posts"
+          </Link>
+          <Link
+            to="/posts"
             className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
           >
             <FaImages className="text-white h-6 w-6" />
             <span className="ml-2">Posts</span>
-          </a>
+          </Link>
+          {token ? (
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center px-4 py-2 text-base font-medium text-white uppercase dark:bg-red-500
+                   rounded-lg hover:bg-red-600
+                   focus:outline-none"
+            >
+              <FiLogOut className="mr-2" />
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="inline-flex items-center px-4 py-2 text-base font-medium text-white dark:bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none "
+            >
+              <FiLogIn className="mr-2" />
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </nav>
   );
-}
+};
+
+export default React.memo(Navbar);

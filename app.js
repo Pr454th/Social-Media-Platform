@@ -19,7 +19,7 @@ app.use(
     parameterLimit: 50000,
   })
 );
-app.use("/api/posts", router);
+app.use("/api", router);
 
 console.log(process.env.MONGO_URI);
 mongoose.connect(process.env.MONGO_URI).then(() => {
