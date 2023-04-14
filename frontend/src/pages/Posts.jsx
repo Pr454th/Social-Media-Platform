@@ -48,7 +48,11 @@ export default function Posts() {
               />
               <h2 className="text-xl font-bold mb-2">{post.title}</h2>
               <p className="text-gray-700 text-base dark:text-cyan-400">
-                {post.description}
+                {post.description.length > 100 ? (
+                  <>{post.description.substring(0, 100)}...</>
+                ) : (
+                  <>{post.description}</>
+                )}
               </p>
             </div>
           </Link>

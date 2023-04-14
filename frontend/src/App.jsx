@@ -9,6 +9,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import AuthContext from "./auth/authContext";
 import Profile from "./pages/Profile/Profile";
+import Home from "./pages/Home/Home";
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
@@ -18,6 +19,7 @@ export default function App() {
         <AuthContext.Provider value={{ token, setToken }}>
           <Navbar />
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/postit" element={<PostForm />} />
             <Route path="/posts" element={<Posts />} />
             <Route path="/posts/:id" element={<PostView />} />
