@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { savePost, getPost } = require("../controllers/postControllers");
+const {
+  savePost,
+  getPost,
+  getPosts,
+  saveComment,
+} = require("../controllers/postControllers");
 const {
   createUser,
   loginUser,
@@ -10,7 +15,7 @@ const {
 } = require("../controllers/userControllers");
 
 // GET BACK ALL THE POSTS
-router.route("/posts").post(savePost);
+router.route("/posts").post(savePost).get(getPosts);
 router.route("/posts/:id").get(getPost);
 
 //USER ROUTES
@@ -20,5 +25,8 @@ router.route("/auth/login").post(loginUser);
 router.route("/auth/protect").get(protect);
 router.route("/users/:id").get(getUser);
 router.route("/:mail").get(getUserName);
+
+//COMMENT ROUTES
+router.route("/comments").post(saveComment);
 
 module.exports = router;

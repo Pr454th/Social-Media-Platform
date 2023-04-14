@@ -1,10 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../auth/authContext";
 
 export default function Login() {
+  const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: "",
@@ -24,6 +26,7 @@ export default function Login() {
       authContext.setToken(token);
       axios.get(`http://localhost:3000/api/${formData.email}`).then((res) => {
         localStorage.setItem("user", res.data.artistname);
+        navigate(`/profile/${res.data.artistname}`);
       });
     });
   };

@@ -18,6 +18,18 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
+  imageData: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  comments: [
+    {
+      ref: "Comment",
+      type: Schema.Types.ObjectId,
+      default: [],
+    },
+  ],
 });
 
 const Post = mongoose.model("Post", PostSchema);

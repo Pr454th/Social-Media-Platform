@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaHome, FaPlus, FaImages } from "react-icons/fa";
+import { FaHome, FaPlus, FaImages, FaUser } from "react-icons/fa";
 import { FiLogOut, FiLogIn } from "react-icons/fi";
 import AuthContext from "../../auth/authContext";
 
@@ -11,7 +11,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { token, setToken } = useContext(AuthContext);
-
+  const user = localStorage.getItem("user");
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
@@ -40,39 +40,39 @@ const Navbar = () => {
                 to="/"
                 className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
               >
-                <FaHome className="text-white h-6 w-6" />
+                <FaHome className="text-white h-4 w-4" />
                 <span className="ml-2">Home</span>
-              </Link>
-              <Link
-                to="/postit"
-                className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
-              >
-                <FaPlus className="text-white h-6 w-6" />
-                <span className="ml-2">Create</span>
               </Link>
               <Link
                 to="/posts"
                 className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
               >
-                <FaImages className="text-white h-6 w-6" />
+                <FaImages className="text-white h-4 w-4" />
                 <span className="ml-2">Posts</span>
               </Link>
               {token ? (
                 <>
                   <Link
-                    to={`/profile/${localStorage.getItem("user")}`}
+                    to="/postit"
                     className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
                   >
-                    <FaImages className="text-white h-6 w-6" />
+                    <FaPlus className="text-white h-4 w-4" />
+                    <span className="ml-2">Create</span>
+                  </Link>
+                  <Link
+                    to={`/profile/${user}`}
+                    className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
+                  >
+                    <FaUser className="text-white h-4 w-4" />
                     <span className="ml-2">Profile</span>
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="inline-flex items-center px-4 py-2 text-base font-medium text-white uppercase dark:bg-red-500
+                    className="inline-flex items-center px-4 py-2 text-base font-medium text-white dark:bg-red-500
                   rounded-lg hover:bg-red-600
                   focus:outline-none"
                   >
-                    <FiLogOut className="mr-2" />
+                    <FiLogOut className="mr-2 h-4 w-4" />
                     Logout
                   </button>
                 </>
@@ -81,7 +81,7 @@ const Navbar = () => {
                   to="/login"
                   className="inline-flex items-center px-4 py-2 text-base font-medium text-white dark:bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none "
                 >
-                  <FiLogIn className="mr-2" />
+                  <FiLogIn className="mr-2 h-4 w-4" />
                   Login
                 </Link>
               )}
@@ -125,39 +125,48 @@ const Navbar = () => {
             to="/"
             className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
           >
-            <FaHome className="text-white h-6 w-6" />
+            <FaHome className="text-white h-4 w-4" />
             <span className="ml-2">Home</span>
-          </Link>
-          <Link
-            to="/postit"
-            className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
-          >
-            <FaPlus className="text-white h-6 w-6" />
-            <span className="ml-2">Create</span>
           </Link>
           <Link
             to="/posts"
             className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
           >
-            <FaImages className="text-white h-6 w-6" />
+            <FaImages className="text-white h-4 w-4" />
             <span className="ml-2">Posts</span>
           </Link>
           {token ? (
-            <button
-              onClick={handleLogout}
-              className="inline-flex items-center px-4 py-2 text-base font-medium text-white uppercase dark:bg-red-500
+            <>
+              <Link
+                to="/postit"
+                className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
+              >
+                <FaPlus className="text-white h-4 w-4" />
+                <span className="ml-2">Create</span>
+              </Link>
+              <Link
+                to={`/profile/${localStorage.getItem("user")}`}
+                className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
+              >
+                <FaUser className="text-white h-4 w-4" />
+                <span className="ml-2">Profile</span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="inline-flex items-center px-4 py-2 text-base font-medium text-white  dark:bg-red-500
                    rounded-lg hover:bg-red-600
                    focus:outline-none"
-            >
-              <FiLogOut className="mr-2" />
-              Logout
-            </button>
+              >
+                <FiLogOut className="mr-2 h-4 w-4" />
+                Logout
+              </button>
+            </>
           ) : (
             <Link
               to="/login"
               className="inline-flex items-center px-4 py-2 text-base font-medium text-white dark:bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none "
             >
-              <FiLogIn className="mr-2" />
+              <FiLogIn className="mr-2 h-4 w-4" />
               Login
             </Link>
           )}

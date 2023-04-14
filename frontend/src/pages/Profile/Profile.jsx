@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FaUser, FaEnvelope, FaPhone } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaPhone, FaExternalLinkAlt } from "react-icons/fa";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 
@@ -24,7 +24,7 @@ export default function Profile() {
         <div className="flex items-center justify-center w-48 h-48 bg-purple-500 rounded-full flex-shrink-0 mx-auto">
           <span className="text-4xl font-bold text-white">{initials}</span>
         </div>
-        <div className="flex items-center mb-4">
+        <div className="flex items-center mb-4 mt-4">
           <FaUser className="mr-2" size={24} />
           <h2 className="text-2xl font-bold">{userData?.artistname}</h2>
         </div>
@@ -42,8 +42,14 @@ export default function Profile() {
         {userData?.posts &&
           userData.posts.map((post) => (
             <div className="bg-gray-800 rounded-md p-4 mb-4" key={post._id}>
-              <Link to={`http://localhost/posts/${post._id}`}>
-                <h3 className="text-lg font-bold">{post.title}</h3>
+              <Link
+                to={`/posts/${post._id}`}
+                className="text-rose-500 hover:text-rose-700"
+              >
+                <div className="flex items-center mb-4">
+                  <FaExternalLinkAlt className="mr-2" size={20} />
+                  <p className="text-2xl">{post?.title}</p>
+                </div>
               </Link>
             </div>
           ))}

@@ -1,47 +1,91 @@
 import React from "react";
 import CommentSection from "./CommentSection";
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import axios from "axios";
 
 const Post = () => {
+  const params = useParams();
+  const [post, setPost] = useState(null);
+  const [imageData, setImageData] = useState(null);
+  const [newComment, setNewComment] = useState("");
+  const [comments, setComments] = useState([]);
+  const user = localStorage.getItem("user");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post(`http://localhost:3000/api/comments`, {
+        comment: newComment,
+        user: user,
+        postid: params.id,
+      })
+      .then((res) => {
+        comments.push(res.data);
+        console.log(res.data);
+        setNewComment("");
+      });
+  };
+
+  const handleCommentChange = (e) => {
+    setNewComment(e.target.value);
+  };
+
+  useEffect(() => {
+    axios.get(`http://localhost:3000/api/posts/${params.id}`).then((res) => {
+      console.log(res.data);
+      const a = res.data.imageSrc.split(",")[1];
+      var b = a
+        .replace("dataimage", "data:image")
+        .replace("base64", ";base64,");
+      setImageData(
+        res.data.imageSrc
+          .split(",")[1]
+          .replace("dataimage", "data:image")
+          .replace("base64", ";base64,")
+      );
+      setPost(res.data);
+      setComments(res.data.comments);
+    });
+  }, []);
+
   return (
     <div className="mb-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-2">
       <div className="p-4">
         <div className="mb-0">
           <img
-            src="/6.png"
+            src={imageData}
             alt="Post image"
             className="w-full h-auto object-cover rounded-lg"
           />
           <div className="flex flex-col mt-4">
-            <h3 className="text-3xl text-gray-500 font-medium">Title</h3>
-            <p className="text-md text-blue-600">By Username</p>
-            <p className="text-rose-400 text-xl">
-              The img tag is used to display the image, and we use the w-16 and
-              h-16 classes to set the width and height to 16 pixels. We also use
-              the rounded-full class to make the image circular. The div tag
-              containing the title, description, and username is given the flex
-              and flex-col classes to align the text vertically. We use the
-              text-lg and font-medium classes to make the title bold and larger,
-              and the text-gray-500 class to make the description and username
-              text gray. The text-sm class is used to make the username text
-              smaller than the description text.
-            </p>
+            <h3 className="text-3xl text-gray-500 font-medium">
+              {post?.title}
+            </h3>
+            <Link to={`/profile/${post?.artist}`}>
+              <p className="text-xl text-blue-600">By {post?.artist}</p>
+            </Link>
+            <p className="text-rose-400 text-xl">{post?.description}</p>
           </div>
         </div>
       </div>
       <div className="p-4 flex flex-col">
-        <div className="mb-0">
-          <CommentSection />
-          <form className="my-2 shadow-xl">
-            <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-900 dark:border-gray-600">
-              <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-black">
-                <label for="comment" className="sr-only">
+        <div className="rounded-md dark:bg-gray-700 mb-0 max-h-96 overflow-y-scroll">
+          <CommentSection comments={comments} />
+        </div>
+        <div className="mt-4">
+          <form className="my-2 shadow-xl" onSubmit={handleSubmit}>
+            <div className="w-full mb-4 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-600">
+              <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-700">
+                <label htmlFor="comment" className="sr-only">
                   Your comment
                 </label>
                 <textarea
                   id="comment"
                   rows="4"
-                  className="outline-none w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-black focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                  className="outline-none w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-700 focus:ring-0 dark:text-white dark:placeholder-gray-400"
                   placeholder="Write a comment..."
+                  value={newComment}
+                  onChange={handleCommentChange}
                   required
                 ></textarea>
               </div>
@@ -58,56 +102,13 @@ const Post = () => {
                     className="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                   >
                     <svg
-                      aria-hidden="true"
                       className="w-5 h-5"
-                      fill="currentColor"
                       viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span className="sr-only">Attach file</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      className="w-5 h-5"
                       fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path
-                        fill-rule="evenodd"
-                        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                        clip-rule="evenodd"
-                      ></path>
+                      <path d="M10 18.034l-8.682-8.415c-1.566-1.518-1.566-3.985 0-5.503 1.567-1.518 4.107-1.518 5.674 0l1.008.977 1.007-.977c1.567-1.518 4.107-1.518 5.674 0 1.566 1.518 1.566 3.985 0 5.503l-8.683 8.415z" />
                     </svg>
-                    <span className="sr-only">Set location</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      className="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
+
                     <span className="sr-only">Upload image</span>
                   </button>
                 </div>
