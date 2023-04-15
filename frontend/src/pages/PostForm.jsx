@@ -19,7 +19,7 @@ export default function PostForm() {
   const { token } = useContext(AuthContext);
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/auth/protect", {
+      .get("/api/auth/protect", {
         headers: {
           Authorization: token,
         },
