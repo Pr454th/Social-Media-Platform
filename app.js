@@ -22,10 +22,13 @@ app.use(
 app.use("/api", router);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("frontend/dist"));
-  const path = require("path");
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running");
   });
 }
 
