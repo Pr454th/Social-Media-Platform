@@ -4,10 +4,8 @@ const Comment = require("../models/Comment");
 const Buffer = require("buffer").Buffer;
 
 const savePost = async (req, res) => {
-  console.log(req.body);
   const { title, description, artist } = req.body;
   const buffer = Buffer.from(req.body.image, "base64");
-  console.log(buffer);
   const post = new Post({
     title: title,
     description: description,

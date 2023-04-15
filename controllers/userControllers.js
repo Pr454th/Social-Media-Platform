@@ -31,7 +31,6 @@ const loginUser = async (req, res) => {
     }
     const payload = { email: email, password: password };
     const token = jwt.sign(payload, process.env.SECRET_KEY);
-    console.log(payload);
     res.status(200).json({ token: token });
   } catch (err) {
     res.status(400).json({ message: err });
@@ -40,11 +39,9 @@ const loginUser = async (req, res) => {
 
 const protect = async (req, res) => {
   const token = req.headers.authorization;
-  console.log(token);
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findOne({ email: decoded.email });
-    console.log(user);
     if (!user) {
       res.status(401).json({ authorized: false });
       return;
