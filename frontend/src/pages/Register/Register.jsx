@@ -26,12 +26,7 @@ export default function Register() {
       setNotMatched(true);
       return;
     }
-    axios
-      .post("http://localhost:3000/api/auth/register", formData)
-      .then((res) => {
-        console.log(res);
-      });
-    console.log(formData);
+    axios.post("/api/auth/register", formData).then((res) => {});
     setRegistered(true);
     const timeoutId = setTimeout(() => {
       navigate("/login");

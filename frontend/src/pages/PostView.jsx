@@ -14,14 +14,13 @@ const Post = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:3000/api/comments`, {
+      .post(`/api/comments`, {
         comment: newComment,
         user: user,
         postid: params.id,
       })
       .then((res) => {
         comments.push(res.data);
-        console.log(res.data);
         setNewComment("");
       });
   };
@@ -31,8 +30,7 @@ const Post = () => {
   };
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/api/posts/${params.id}`).then((res) => {
-      console.log(res.data);
+    axios.get(`/api/posts/${params.id}`).then((res) => {
       const a = res.data.imageSrc.split(",")[1];
       var b = a
         .replace("dataimage", "data:image")

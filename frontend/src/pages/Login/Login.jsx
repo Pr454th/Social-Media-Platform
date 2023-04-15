@@ -18,13 +18,11 @@ export default function Login() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    axios.post("http://localhost:3000/api/auth/login", formData).then((res) => {
+    axios.post("/api/auth/login", formData).then((res) => {
       const token = res.data.token;
-      console.log(token);
       localStorage.setItem("token", token);
       authContext.setToken(token);
-      axios.get(`http://localhost:3000/api/${formData.email}`).then((res) => {
+      axios.get(`/api/${formData.email}`).then((res) => {
         localStorage.setItem("user", res.data.artistname);
         navigate(`/profile/${res.data.artistname}`);
       });

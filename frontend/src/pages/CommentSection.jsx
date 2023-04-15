@@ -17,7 +17,10 @@ const CommentSection = (props) => {
       <ul>
         {comments && comments.length > 0 ? (
           comments.map((comment) => (
-            <li className="mb-4 rounded-md dark:bg-gray-800 p-4">
+            <li
+              className="mb-4 rounded-md dark:bg-gray-800 p-4"
+              key={comment._id}
+            >
               <div className="flex items-center mb-2">{comment.comment}</div>
               <p className="text-gray-500 dark:text-grey-400">{comment.user}</p>
             </li>

@@ -9,8 +9,7 @@ export default function Profile() {
   const userID = params.name;
   const initials = userID.slice(0, 1);
   useEffect(() => {
-    axios.get(`http://localhost:3000/api/users/${userID}`).then((res) => {
-      console.log(res.data);
+    axios.get(`/api/users/${userID}`).then((res) => {
       setUserData(res.data);
     });
   }, []);

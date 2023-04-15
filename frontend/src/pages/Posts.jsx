@@ -13,8 +13,7 @@ export default function Posts() {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/posts").then((res) => {
-      console.log(res.data);
+    axios.get("/api/posts").then((res) => {
       setPosts(res.data);
       // console.log(res.data.imageSrc);
       // const a = res.data.imageSrc.split(",")[1];

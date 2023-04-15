@@ -17,7 +17,6 @@ export default function PostForm() {
   });
 
   const { token } = useContext(AuthContext);
-  console.log(token);
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/auth/protect", {
@@ -26,14 +25,11 @@ export default function PostForm() {
         },
       })
       .then((res) => {
-        console.log(res);
         setAuthorized(res.data.authorized);
       });
     if (!token) {
       navigate("/login");
     } else {
-      console.log(token);
-      console.log("token is present");
     }
   }, []);
 
@@ -61,11 +57,8 @@ export default function PostForm() {
     e.preventDefault();
     formData.image = imageData;
     formData.artist = localStorage.getItem("user");
-    console.log(formData);
     // Add code here to submit the form data
-    axios.post("http://localhost:3000/api/posts", formData).then((res) => {
-      console.log(res);
-    });
+    axios.post("/api/posts", formData).then((res) => {});
   };
   return (
     <>
