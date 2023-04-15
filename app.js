@@ -12,7 +12,7 @@ const router = require("./routes/postRoutes");
 
 app.use(cors());
 app.use(fileUpload());
-app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.json({ limit: "100mb" }));
 app.use(
   bodyParser.urlencoded({
     limit: "50mb",
