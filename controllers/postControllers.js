@@ -39,11 +39,13 @@ const getPost = async (req, res) => {
     const imageSrc = `data:image/jpeg;base64,${imageData}`;
 
     res.json({
+      _id: post._id,
       title: post.title,
       description: post.description,
       imageSrc: imageSrc,
       artist: post.artist,
       comments: post.comments,
+      imageData: "",
     });
   } catch (err) {
     res.status(500).json({ message: "not working" });
@@ -62,6 +64,15 @@ const getPosts = async (req, res) => {
     for (let i = 0; i < posts.length; i++) {
       posts[i].imageData = imageSrc(posts[i].image);
     }
+    res.json(posts);
+  } catch (err) {
+    res.json({ message: err });
+  }
+};
+
+const getPostIds = async (req, res) => {
+  try {
+    const posts = await Post.find({}, { _id: 1 });
     res.json(posts);
   } catch (err) {
     res.json({ message: err });
@@ -90,5 +101,6 @@ module.exports = {
   savePost,
   getPost,
   getPosts,
+  getPostIds,
   saveComment,
 };

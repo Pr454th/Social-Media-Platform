@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://artistic-hub.vercel.app",
+        target: "https://artistic-hub.vercel.app/",
         secure: false,
         changeOrigin: true,
         configure: (proxy, _options) => {
