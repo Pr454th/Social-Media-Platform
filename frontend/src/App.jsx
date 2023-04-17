@@ -15,7 +15,7 @@ export default function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   return (
     <Router>
-      <div className="md:container md:mx-auto dark:bg-dark">
+      <div className="dark:bg-dark">
         <AuthContext.Provider value={{ token, setToken }}>
           <Navbar />
           <Routes>

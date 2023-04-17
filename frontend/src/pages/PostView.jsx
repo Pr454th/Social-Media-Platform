@@ -1,14 +1,17 @@
 import React from "react";
 import CommentSection from "./CommentSection";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import AuthContext from "../auth/authContext";
 
 const Post = () => {
   const params = useParams();
   const [post, setPost] = useState(null);
   const [imageData, setImageData] = useState(null);
   const [newComment, setNewComment] = useState("");
+  const { token } = useContext(AuthContext);
+  const [authorized, setAuthorized] = useState(false);
   const [comments, setComments] = useState([]);
   const user = localStorage.getItem("user");
   const handleSubmit = (e) => {
@@ -28,7 +31,6 @@ const Post = () => {
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
   };
-
   useEffect(() => {
     axios.get(`/api/posts/${params.id}`).then((res) => {
       const a = res.data.imageSrc.split(",")[1];
@@ -43,8 +45,19 @@ const Post = () => {
       );
       setPost(res.data);
       setComments(res.data.comments);
+      axios
+        .get("/api/auth/protect", {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          setAuthorized(res.data.authorized);
+        });
     });
   }, []);
+
+  const toggleLike = () => {};
 
   return (
     <div className="mb-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-2">
@@ -71,48 +84,51 @@ const Post = () => {
           <CommentSection comments={comments} />
         </div>
         <div className="mt-4">
-          <form className="my-2 shadow-xl" onSubmit={handleSubmit}>
-            <div className="w-full mb-4 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-600">
-              <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-700">
-                <label htmlFor="comment" className="sr-only">
-                  Your comment
-                </label>
-                <textarea
-                  id="comment"
-                  rows="4"
-                  className="outline-none w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-700 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-                  placeholder="Write a comment..."
-                  value={newComment}
-                  onChange={handleCommentChange}
-                  required
-                ></textarea>
-              </div>
-              <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
-                <button
-                  type="submit"
-                  className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
-                >
-                  Post comment
-                </button>
-                <div className="flex pl-0 space-x-1 sm:pl-2">
+          {authorized && (
+            <form className="my-2 shadow-xl" onSubmit={handleSubmit}>
+              <div className="w-full mb-4 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-600">
+                <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-700">
+                  <label htmlFor="comment" className="sr-only">
+                    Your comment
+                  </label>
+                  <textarea
+                    id="comment"
+                    rows="4"
+                    className="outline-none w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-700 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                    placeholder="Write a comment..."
+                    value={newComment}
+                    onChange={handleCommentChange}
+                    required
+                  ></textarea>
+                </div>
+                <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
                   <button
-                    type="button"
-                    className="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                    type="submit"
+                    className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
                   >
-                    <svg
-                      className="w-5 h-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M10 18.034l-8.682-8.415c-1.566-1.518-1.566-3.985 0-5.503 1.567-1.518 4.107-1.518 5.674 0l1.008.977 1.007-.977c1.567-1.518 4.107-1.518 5.674 0 1.566 1.518 1.566 3.985 0 5.503l-8.683 8.415z" />
-                    </svg>
-
-                    <span className="sr-only">Upload image</span>
+                    Post comment
                   </button>
+                  <div className="flex pl-0 space-x-1 sm:pl-2">
+                    <button
+                      type="button"
+                      onClick={toggleLike}
+                      className={`inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-red-400 dark:hover:text-white dark:hover:bg-gray-600`}
+                    >
+                      <svg
+                        className="w-5 h-5 text-red"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M10 18.034l-8.682-8.415c-1.566-1.518-1.566-3.985 0-5.503 1.567-1.518 4.107-1.518 5.674 0l1.008.977 1.007-.977c1.567-1.518 4.107-1.518 5.674 0 1.566 1.518 1.566 3.985 0 5.503l-8.683 8.415z" />
+                      </svg>
+
+                      <span className="sr-only">Like</span>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          )}
         </div>
       </div>
     </div>

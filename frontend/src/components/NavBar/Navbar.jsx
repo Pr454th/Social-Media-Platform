@@ -23,6 +23,10 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  const handleLogin = () => {
+    navigate("/login");
+  };
+
   return (
     <nav className="bg-gray-800">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,26 +68,24 @@ const Navbar = () => {
                     className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
                   >
                     <FaUser className="text-white h-4 w-4" />
-                    <span className="ml-2">Profile</span>
+                    <span className="ml-2">{user}</span>
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="inline-flex items-center px-4 py-2 text-base font-medium text-white dark:bg-red-500
-                  rounded-lg hover:bg-red-600
-                  focus:outline-none"
+                    className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
                   >
-                    <FiLogOut className="mr-2 h-4 w-4" />
-                    Logout
+                    <FiLogOut className="text-white h-4 w-4" />
+                    <span className="ml-2">Logout</span>
                   </button>
                 </>
               ) : (
-                <Link
-                  to="/login"
-                  className="inline-flex items-center px-4 py-2 text-base font-medium text-white dark:bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none "
+                <button
+                  onClick={handleLogin}
+                  className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
                 >
                   <FiLogIn className="mr-2 h-4 w-4" />
                   Login
-                </Link>
+                </button>
               )}
             </div>
           </div>
@@ -149,26 +151,24 @@ const Navbar = () => {
                 className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
               >
                 <FaUser className="text-white h-4 w-4" />
-                <span className="ml-2">Profile</span>
+                <span className="ml-2">{user}</span>
               </Link>
               <button
                 onClick={handleLogout}
-                className="inline-flex items-center px-4 py-2 text-base font-medium text-white  dark:bg-red-500
-                   rounded-lg hover:bg-red-600
-                   focus:outline-none"
+                className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
               >
-                <FiLogOut className="mr-2 h-4 w-4" />
-                Logout
+                <FiLogOut className="text-white h-4 w-4" />
+                <span className="ml-2">Logout</span>
               </button>
             </>
           ) : (
-            <Link
-              to="/login"
-              className="inline-flex items-center px-4 py-2 text-base font-medium text-white dark:bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none "
+            <button
+              onClick={handleLogin}
+              className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
             >
               <FiLogIn className="mr-2 h-4 w-4" />
               Login
-            </Link>
+            </button>
           )}
         </div>
       </div>

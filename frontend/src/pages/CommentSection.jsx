@@ -1,16 +1,12 @@
 import React from "react";
 import { HiOutlineChatAlt2 } from "react-icons/hi";
-// import { useRef, useEffect } from "react";
+import AuthContext from "../auth/authContext";
 
 const CommentSection = (props) => {
-  // const commentRef = useRef();
-  // useEffect(() => {
-  //   commentRef.current?.scrollIntoView({ behavior: "smooth" });
-  // }, [comments]);
   const { comments } = props;
   return (
     <div className="rounded-lg p-4 overflow-y-auto shadow-2xl text-black dark:text-white">
-      <h2 className="text-gray-900 text-black dark:text-white text-2xl flex items-center mb-4">
+      <h2 className="text-gray-900 dark:text-white text-2xl flex items-center mb-4">
         <HiOutlineChatAlt2 className="inline-block mr-2 text-blue-400" />{" "}
         Comments
       </h2>
@@ -27,8 +23,8 @@ const CommentSection = (props) => {
           ))
         ) : (
           <li>
-            <div className="flex text-2xl mb-4 text-gray-500 dark:text-red-400 items-center justify-center">
-              <p>No comments yet</p>
+            <div className="flex text-xl mb-4 text-gray-500 dark:text-gray-400 items-center justify-center">
+              <p>Comments to this post will appear here</p>
             </div>
           </li>
         )}

@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 export default function Posts() {
   const [ids, setIds] = useState([]);
   const [posts, setPosts] = useState([]);
-  const [page, setPage] = useState(1);
   const imageSrc = (image) => {
     const a = image.split(",")[1];
     var b = a.replace("dataimage", "data:image").replace("base64", ";base64,");
@@ -66,7 +65,7 @@ export default function Posts() {
           )
           .map((post) => (
             <Link to={`/posts/${post._id}`} key={post._id}>
-              <div className="card p-4 bg-white rounded-lg shadow-md drop-shadow-2xl bg-white dark:bg-black dark:text-white border-2 border-rose-400 ">
+              <div className="card p-4 bg-white rounded-lg shadow-md drop-shadow-2xl dark:bg-gray-800 dark:text-white m-4">
                 <img
                   className="w-full h-48 object-cover mb-4"
                   src={post.imageData}
