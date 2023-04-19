@@ -1,13 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../auth/authContext";
+import { useAuthDispatch, useAuthState } from "../../Context/AuthContext";
 
 export default function Login() {
+  const authDispatch = useAuthDispatch();
+  const authState = useAuthState();
   const navigate = useNavigate();
   const [logging, setLogging] = useState(false);
+  const [error, setError] = useState("");
   const authContext = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: "",
@@ -17,17 +21,34 @@ export default function Login() {
     e.preventDefault();
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    console.log(authState);
+    if (authState.isAuthenticated) {
+      console.log("isAuthenticated");
+    }
+  }, [authState]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setLogging(true);
     axios.post("/api/auth/login", formData).then((res) => {
+      // console.log(res.data);
+      if (res.data.error) {
+        setLogging(false);
+        setError(res.data.error);
+        return;
+      }
       const token = res.data.token;
       localStorage.setItem("token", token);
-      authContext.setToken(token);
-      axios.get(`/api/${formData.email}`).then((res) => {
-        localStorage.setItem("user", res.data.artistname);
-        navigate(`/profile/${res.data.artistname}`);
+      localStorage.setItem("user", res.data.user.artistname);
+      authDispatch({
+        type: "LOGIN",
+        user: res.data.user,
+        token: res.data.token,
+        isAuthenticated: true,
       });
+      navigate(`/profile/${res.data.user.artistname}`);
     });
   };
 
@@ -127,12 +148,19 @@ export default function Login() {
                     <span className="text-rose-500">Logging in</span>
                   </div>
                 ) : (
-                  <button
-                    type="submit"
-                    className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-                  >
-                    Login to your account
-                  </button>
+                  <div className="flex items-center">
+                    <button
+                      type="submit"
+                      className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                    >
+                      Login to your account
+                    </button>
+                    {error && error !== "" ? (
+                      <div className="text-red-500 text-lg">{error}</div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 )}
                 <div className="text-sm font-medium text-gray-900 dark:text-white">
                   Not registered yet?{" "}

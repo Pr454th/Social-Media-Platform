@@ -21,19 +21,22 @@ const createUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = User.findOne(
-      { email: email, password: password },
-      { password: 0 }
-    );
-    if (!user) {
-      res.status(401).json({ error: "User not found" });
+    const user = await User.findOne({ email: email });
+    console.log(user);
+    if (user != null) {
+      if (user.password === password) {
+        const payload = { email: email, password: password };
+        const token = jwt.sign(payload, process.env.SECRET_KEY);
+        res.status(200).json({ token: token, user: user });
+        return;
+      }
+      res.status(200).json({ error: "Wrong password" });
+    } else {
+      res.status(200).json({ error: "User not found" });
       return;
     }
-    const payload = { email: email, password: password };
-    const token = jwt.sign(payload, process.env.SECRET_KEY);
-    res.status(200).json({ token: token });
   } catch (err) {
-    res.status(400).json({ message: err });
+    res.status(401).json({ message: err });
   }
 };
 
@@ -68,26 +71,9 @@ const getUser = async (req, res) => {
   }
 };
 
-const getUserName = async (req, res) => {
-  try {
-    const name = await User.findOne(
-      { email: req.params.mail },
-      { artistname: 1 }
-    );
-    if (!name) {
-      res.status(401).json({ message: "No User Found" });
-      return;
-    }
-    res.json(name);
-  } catch (err) {
-    res.json({ message: err });
-  }
-};
-
 module.exports = {
   createUser,
   loginUser,
   protect,
   getUser,
-  getUserName,
 };

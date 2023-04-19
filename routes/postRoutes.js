@@ -12,7 +12,6 @@ const {
   loginUser,
   protect,
   getUser,
-  getUserName,
 } = require("../controllers/userControllers");
 
 // GET BACK ALL THE POSTS
@@ -26,7 +25,6 @@ router.route("/auth/register").post(createUser);
 router.route("/auth/login").post(loginUser);
 router.route("/auth/protect").get(protect);
 router.route("/users/:id").get(getUser);
-router.route("/:mail").get(getUserName);
 
 //COMMENT ROUTES
 router.route("/comments").post(saveComment);

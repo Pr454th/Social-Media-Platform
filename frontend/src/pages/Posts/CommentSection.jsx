@@ -1,6 +1,5 @@
 import React from "react";
 import { HiOutlineChatAlt2 } from "react-icons/hi";
-import AuthContext from "../auth/authContext";
 
 const CommentSection = (props) => {
   const { comments } = props;

@@ -3,7 +3,7 @@ import CommentSection from "./CommentSection";
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import AuthContext from "../auth/authContext";
+import AuthContext from "../../auth/authContext";
 
 const Post = () => {
   const params = useParams();

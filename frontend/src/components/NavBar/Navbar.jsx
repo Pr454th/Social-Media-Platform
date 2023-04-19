@@ -6,11 +6,15 @@ import { useNavigate } from "react-router-dom";
 import { FaHome, FaPlus, FaImages, FaUser } from "react-icons/fa";
 import { FiLogOut, FiLogIn } from "react-icons/fi";
 import AuthContext from "../../auth/authContext";
+import { useAuthState, useAuthDispatch } from "../../Context/AuthContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const authState = useAuthState();
+  const authDispatch = useAuthDispatch();
   const navigate = useNavigate();
-  const { token, setToken } = useContext(AuthContext);
+  // const { token, setToken } = useContext(AuthContext);
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
   const user = localStorage.getItem("user");
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
@@ -19,6 +23,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    authDispatch({ type: "LOGOUT" });
     setToken(null);
     navigate("/login");
   };
@@ -54,7 +59,7 @@ const Navbar = () => {
                 <FaImages className="text-white h-4 w-4" />
                 <span className="ml-2">Posts</span>
               </Link>
-              {token ? (
+              {authState.isAuthenticated ? (
                 <>
                   <Link
                     to="/postit"
@@ -137,7 +142,7 @@ const Navbar = () => {
             <FaImages className="text-white h-4 w-4" />
             <span className="ml-2">Posts</span>
           </Link>
-          {token ? (
+          {authState.isAuthenticated ? (
             <>
               <Link
                 to="/postit"
