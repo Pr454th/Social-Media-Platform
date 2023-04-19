@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import axios from "axios";
-import AuthContext from "../../auth/authContext";
+import { useAuthState } from "../../Context/AuthContext";
 
 export default function PostForm() {
   const navigate = useNavigate();
   const [imageData, setImageData] = useState(null);
-  const [authorized, setAuthorized] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [authorized, setAuthorized] = useState(false);
+  const [user, setUser] = useState("");
   const [selectedFileName, setSelectedFileName] = useState("Click to upload");
   const [formData, setFormData] = useState({
     image: "",
@@ -17,21 +18,14 @@ export default function PostForm() {
     description: "",
   });
 
-  const { token } = useContext(AuthContext);
   useEffect(() => {
-    axios
-      .get("/api/auth/protect", {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        setAuthorized(res.data.authorized);
-      });
-    if (!token) {
-      navigate("/login");
-    } else {
-    }
+    axios.get("/api/auth/protect").then((res) => {
+      if (res.data.id != null) {
+        console.log("authorized");
+        setUser(res.data.name);
+        setAuthorized(true);
+      }
+    });
   }, []);
 
   const handleChange = (e) => {
@@ -40,6 +34,7 @@ export default function PostForm() {
       [e.target.name]: e.target.value,
     });
   };
+
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     setSelectedFileName(event.target.files[0].name);
@@ -57,9 +52,8 @@ export default function PostForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     formData.image = imageData;
-    formData.artist = localStorage.getItem("user");
+    formData.artist = user;
     setSubmitting(true);
-    // Add code here to submit the form data
     axios.post("/api/posts", formData).then((res) => {
       navigate(`/posts/${res.data._id}`);
     });

@@ -1,30 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaHome, FaPlus, FaImages, FaUser } from "react-icons/fa";
 import { FiLogOut, FiLogIn } from "react-icons/fi";
-import AuthContext from "../../auth/authContext";
 import { useAuthState, useAuthDispatch } from "../../Context/AuthContext";
+import { useCookies } from "react-cookie";
 
 const Navbar = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const [isOpen, setIsOpen] = useState(false);
-  const authState = useAuthState();
   const authDispatch = useAuthDispatch();
   const navigate = useNavigate();
-  // const { token, setToken } = useContext(AuthContext);
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
-  const user = localStorage.getItem("user");
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
     authDispatch({ type: "LOGOUT" });
-    setToken(null);
+    removeCookie("token", { path: "/" });
+    removeCookie("user", { path: "/" });
     navigate("/login");
   };
 
@@ -46,20 +41,13 @@ const Navbar = () => {
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-4">
               <Link
-                to="/"
-                className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
-              >
-                <FaHome className="text-white h-4 w-4" />
-                <span className="ml-2">Home</span>
-              </Link>
-              <Link
                 to="/posts"
                 className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
               >
                 <FaImages className="text-white h-4 w-4" />
                 <span className="ml-2">Posts</span>
               </Link>
-              {authState.isAuthenticated ? (
+              {cookies?.user?.isAuthenticated ? (
                 <>
                   <Link
                     to="/postit"
@@ -69,11 +57,11 @@ const Navbar = () => {
                     <span className="ml-2">Create</span>
                   </Link>
                   <Link
-                    to={`/profile/${user}`}
+                    to={`/profile/${cookies.user.name}`}
                     className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
                   >
                     <FaUser className="text-white h-4 w-4" />
-                    <span className="ml-2">{user}</span>
+                    <span className="ml-2">{cookies.user.name}</span>
                   </Link>
                   <button
                     onClick={handleLogout}
@@ -142,7 +130,7 @@ const Navbar = () => {
             <FaImages className="text-white h-4 w-4" />
             <span className="ml-2">Posts</span>
           </Link>
-          {authState.isAuthenticated ? (
+          {cookies?.user?.isAuthenticated ? (
             <>
               <Link
                 to="/postit"
@@ -152,11 +140,11 @@ const Navbar = () => {
                 <span className="ml-2">Create</span>
               </Link>
               <Link
-                to={`/profile/${localStorage.getItem("user")}`}
+                to={`/profile/${cookies.user.name}`}
                 className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
               >
                 <FaUser className="text-white h-4 w-4" />
-                <span className="ml-2">{user}</span>
+                <span className="ml-2">{cookies.user.name}</span>
               </Link>
               <button
                 onClick={handleLogout}

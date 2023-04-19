@@ -72,13 +72,9 @@ const getPosts = async (req, res) => {
 
 const removePost = async (req, res) => {
   try {
-    const token = req.cookies.token;
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    const user = await User.findOne({ email: decoded.email });
-    if (user != null) {
-      await Post.findOneAndDelete({ _id: req.params.id });
-      res.status(200).json({ message: "Removed successfully!" });
-    }
+    console.log(req.params.id);
+    await Post.findOneAndDelete({ _id: req.params.id });
+    res.status(200).json({ removed: 1 });
   } catch (err) {
     res.status(404).json({ message: err });
   }

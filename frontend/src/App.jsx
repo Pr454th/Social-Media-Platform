@@ -21,7 +21,7 @@ export default function App() {
           {/* <AuthContext.Provider value={{ token, setToken }}> */}
           <Navbar />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Login />} />
             <Route path="/postit" element={<PostForm />} />
             <Route path="/posts" element={<Posts />} />
             <Route path="/posts/:id" element={<PostView />} />

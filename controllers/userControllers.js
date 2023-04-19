@@ -49,7 +49,7 @@ const protect = async (req, res) => {
       res.status(401).json({ id: null });
       return;
     }
-    res.status(200).json({ id: user._id });
+    res.status(200).json({ id: user._id, name: user.artistname });
   } catch (err) {
     res.json({ id: null });
   }

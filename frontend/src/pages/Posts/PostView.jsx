@@ -2,18 +2,18 @@ import React from "react";
 import CommentSection from "./CommentSection";
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import axios from "axios";
-import AuthContext from "../../auth/authContext";
 
 const Post = () => {
   const params = useParams();
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const [post, setPost] = useState(null);
   const [imageData, setImageData] = useState(null);
   const [newComment, setNewComment] = useState("");
-  const { token } = useContext(AuthContext);
-  const [authorized, setAuthorized] = useState(false);
   const [comments, setComments] = useState([]);
-  const user = localStorage.getItem("user");
+  const [authorized, setAuthorized] = useState(false);
+  const user = cookies.user.name;
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -45,15 +45,9 @@ const Post = () => {
       );
       setPost(res.data);
       setComments(res.data.comments);
-      axios
-        .get("/api/auth/protect", {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then((res) => {
-          setAuthorized(res.data.authorized);
-        });
+      axios.get("/api/auth/protect").then((res) => {
+        if (res.data.id != null) setAuthorized(true);
+      });
     });
   }, []);
 

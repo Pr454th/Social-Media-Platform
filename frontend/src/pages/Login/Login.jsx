@@ -24,13 +24,6 @@ export default function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  useEffect(() => {
-    console.log(authState);
-    if (authState.isAuthenticated) {
-      console.log("isAuthenticated");
-    }
-  }, [authState]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setLogging(true);
@@ -40,13 +33,19 @@ export default function Login() {
         setError(res.data.error);
         return;
       }
-      console.log(res.data);
       authDispatch({
         type: "LOGIN",
-        token: res.data.token,
         isAuthenticated: true,
       });
-      setCookie("token", res.data.token, { path: "/" });
+      setCookie("token", res.data.token, { path: "/" }, { sameSite: "none" });
+      setCookie(
+        "user",
+        { name: res.data.user.artistname, isAuthenticated: true },
+        { path: "/" },
+        {
+          sameSite: "none",
+        }
+      );
       navigate(`/profile/${res.data.user.artistname}`);
     });
   };
