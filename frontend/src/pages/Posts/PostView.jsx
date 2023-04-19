@@ -13,7 +13,7 @@ const Post = () => {
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
   const [authorized, setAuthorized] = useState(false);
-  const user = cookies.user.name;
+  const user = cookies?.user?.name;
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
