@@ -1,18 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUser, FaEnvelope, FaPhone, FaExternalLinkAlt } from "react-icons/fa";
+import { CiCircleRemove } from "react-icons/ci";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 
 export default function Profile() {
   const [userData, setUserData] = React.useState({});
+  const [owner, setOwner] = useState(false);
   const params = useParams();
   const userID = params.name;
   const initials = userID.slice(0, 1);
   useEffect(() => {
     axios.get(`/api/users/${userID}`).then((res) => {
       setUserData(res.data);
+      axios.get("/api/auth/protect").then((auth) => {
+        if (auth.id === res.data._id) {
+          setOwner(true);
+        }
+      });
     });
   }, []);
+
+  const handleDelete = (e) => {};
 
   return (
     <div className="bg-black text-white py-8 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-center items-stretch md:space-x-4">
@@ -43,17 +52,27 @@ export default function Profile() {
         <div className="flex-col items-center">
           {userData?.posts && userData?.posts.length > 0 ? (
             userData.posts.map((post) => (
-              <div className="bg-gray-800 rounded-md p-2" key={post._id}>
-                <Link
-                  to={`/posts/${post._id}`}
-                  className="text-rose-500 hover:text-rose-700"
+              <>
+                <div
+                  className="bg-gray-800 rounded-md p-2 flex justify-between align-middle"
+                  key={post._id}
                 >
-                  <div className="flex items-center mb-2">
-                    <FaExternalLinkAlt className="mr-2" size={20} />
-                    <p className="text-2xl">{post?.title}</p>
+                  <Link
+                    to={`/posts/${post._id}`}
+                    className="text-rose-500 hover:text-rose-700"
+                  >
+                    <div className="flex items-center mb-2 align-middle0">
+                      <FaExternalLinkAlt className="mr-2" size={40} />
+                      <p className="text-2xl">{post?.title}</p>
+                    </div>
+                  </Link>
+                  <div>
+                    <button onClick={handleDelete} value={post._id}>
+                      <CiCircleRemove className="mr-2" size={20} />
+                    </button>
                   </div>
-                </Link>
-              </div>
+                </div>
+              </>
             ))
           ) : (
             <div className="flex text-2xl mb-4 text-gray-500 dark:text-red-400 items-center justify-center">

@@ -6,6 +6,7 @@ const {
   getPosts,
   saveComment,
   getPostIds,
+  removePost,
 } = require("../controllers/postControllers");
 const {
   createUser,
@@ -17,7 +18,7 @@ const {
 // GET BACK ALL THE POSTS
 router.route("/posts").post(savePost).get(getPosts);
 router.route("/posts/ids").get(getPostIds);
-router.route("/posts/:id").get(getPost);
+router.route("/posts/:id").get(getPost).delete(removePost);
 
 //USER ROUTES
 // router.route("/").get(getUsers);

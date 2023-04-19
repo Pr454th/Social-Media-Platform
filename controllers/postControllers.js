@@ -70,6 +70,20 @@ const getPosts = async (req, res) => {
   }
 };
 
+const removePost = async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const user = await User.findOne({ email: decoded.email });
+    if (user != null) {
+      await Post.findOneAndDelete({ _id: req.params.id });
+      res.status(200).json({ message: "Removed successfully!" });
+    }
+  } catch (err) {
+    res.status(404).json({ message: err });
+  }
+};
+
 const getPostIds = async (req, res) => {
   try {
     const posts = await Post.find({}, { _id: 1 });
@@ -99,6 +113,7 @@ const saveComment = async (req, res) => {
 
 module.exports = {
   savePost,
+  removePost,
   getPost,
   getPosts,
   getPostIds,

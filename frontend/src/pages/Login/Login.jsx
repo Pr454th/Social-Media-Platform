@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../auth/authContext";
 import { useAuthDispatch, useAuthState } from "../../Context/AuthContext";
+import { useCookies } from "react-cookie";
 
 export default function Login() {
   const authDispatch = useAuthDispatch();
@@ -12,6 +13,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [logging, setLogging] = useState(false);
   const [error, setError] = useState("");
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const authContext = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: "",
@@ -33,21 +35,18 @@ export default function Login() {
     e.preventDefault();
     setLogging(true);
     axios.post("/api/auth/login", formData).then((res) => {
-      // console.log(res.data);
       if (res.data.error) {
         setLogging(false);
         setError(res.data.error);
         return;
       }
-      const token = res.data.token;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", res.data.user.artistname);
+      console.log(res.data);
       authDispatch({
         type: "LOGIN",
-        user: res.data.user,
         token: res.data.token,
         isAuthenticated: true,
       });
+      setCookie("token", res.data.token, { path: "/" });
       navigate(`/profile/${res.data.user.artistname}`);
     });
   };

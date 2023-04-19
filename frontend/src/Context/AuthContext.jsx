@@ -27,14 +27,12 @@ function authReducer(state, action) {
     case "LOGIN":
       return {
         ...state,
-        user: action.user,
         token: action.token,
         isAuthenticated: action.isAuthenticated,
       };
     case "LOGOUT":
       return {
         ...state,
-        user: null,
         token: null,
         isAuthenticated: false,
       };
@@ -45,6 +43,5 @@ function authReducer(state, action) {
 
 const initialState = {
   isAuthenticated: false,
-  user: null,
   token: null,
 };

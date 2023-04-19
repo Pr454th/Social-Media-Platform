@@ -41,17 +41,17 @@ const loginUser = async (req, res) => {
 };
 
 const protect = async (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.cookies.token;
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findOne({ email: decoded.email });
     if (!user) {
-      res.status(401).json({ authorized: false });
+      res.status(401).json({ id: null });
       return;
     }
-    res.json({ authorized: true });
+    res.status(200).json({ id: user._id });
   } catch (err) {
-    res.json({ authorized: false });
+    res.json({ id: null });
   }
 };
 
