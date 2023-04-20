@@ -15,7 +15,7 @@ export default function Profile() {
     axios.get(`/api/users/${userID}`).then((res) => {
       setUserData(res.data);
       axios.get("/api/auth/protect").then((auth) => {
-        if (auth.data.id === res.data._id) {
+        if (auth.data.user._id === res.data._id) {
           setOwner(true);
         }
       });
@@ -82,7 +82,7 @@ export default function Profile() {
         <div className="flex-col items-center">
           {userData?.posts && userData?.posts.length > 0 ? (
             userData.posts.map((post, index) => (
-              <>
+              <div key={index}>
                 <div
                   className="bg-gray-800 rounded-md p-2 flex justify-between align-middle"
                   key={index}
@@ -99,14 +99,14 @@ export default function Profile() {
                     </div>
                   </Link>
                   {owner && (
-                    <div>
+                    <div key={index}>
                       <button onClick={() => handleDelete(post._id)}>
                         <CiCircleRemove className="mb-2" size={40} />
                       </button>
                     </div>
                   )}
                 </div>
-              </>
+              </div>
             ))
           ) : (
             <div className="flex text-2xl mb-4 text-gray-500 dark:text-red-400 items-center justify-center">

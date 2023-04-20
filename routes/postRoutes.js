@@ -11,6 +11,7 @@ const {
 const {
   createUser,
   loginUser,
+  logoutUser,
   protect,
   getUser,
 } = require("../controllers/userControllers");
@@ -24,6 +25,7 @@ router.route("/posts/:id").get(getPost).delete(removePost);
 // router.route("/").get(getUsers);
 router.route("/auth/register").post(createUser);
 router.route("/auth/login").post(loginUser);
+router.route("/auth/logout").get(logoutUser);
 router.route("/auth/protect").get(protect);
 router.route("/users/:id").get(getUser);
 

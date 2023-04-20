@@ -22,12 +22,19 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email: email });
-    console.log(user);
     if (user != null) {
       if (user.password === password) {
-        const payload = { email: email, password: password };
+        const payload = { userId: user._id };
         const token = jwt.sign(payload, process.env.SECRET_KEY);
-        res.status(200).json({ token: token, user: user });
+
+        res.cookie("token", token, {
+          maxAge: 1000 * 60 * 60 * 24 * 14,
+          httpOnly: true,
+          sameSite: "strict",
+        });
+
+        user.password = "";
+        res.status(200).json({ user: user });
         return;
       }
       res.status(200).json({ error: "Wrong password" });
@@ -40,16 +47,28 @@ const loginUser = async (req, res) => {
   }
 };
 
+const logoutUser = async (req, res) => {
+  console.log("logout");
+  res.cookie("token", "", {
+    httpOnly: true,
+    expires: new Date(0),
+    sameSite: "strict",
+  });
+  res.status(200).json({ loggedOut: 1 });
+};
+
 const protect = async (req, res) => {
   const token = req.cookies.token;
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    const user = await User.findOne({ email: decoded.email });
+    const user = await User.findOne({ _id: decoded.userId });
     if (!user) {
       res.status(401).json({ id: null });
       return;
     }
-    res.status(200).json({ id: user._id, name: user.artistname });
+    console.log(user);
+    user.password = "";
+    res.status(200).json({ user: user });
   } catch (err) {
     res.json({ id: null });
   }
@@ -74,6 +93,7 @@ const getUser = async (req, res) => {
 module.exports = {
   createUser,
   loginUser,
+  logoutUser,
   protect,
   getUser,
 };

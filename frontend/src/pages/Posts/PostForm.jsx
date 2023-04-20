@@ -1,32 +1,20 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import axios from "axios";
 import { useAuthState } from "../../Context/AuthContext";
 
 export default function PostForm() {
   const navigate = useNavigate();
+  const authState = useAuthState();
   const [imageData, setImageData] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  const [authorized, setAuthorized] = useState(false);
-  const [user, setUser] = useState("");
   const [selectedFileName, setSelectedFileName] = useState("Click to upload");
   const [formData, setFormData] = useState({
     image: "",
     title: "",
     description: "",
   });
-
-  useEffect(() => {
-    axios.get("/api/auth/protect").then((res) => {
-      if (res.data.id != null) {
-        console.log("authorized");
-        setUser(res.data.name);
-        setAuthorized(true);
-      }
-    });
-  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -52,7 +40,7 @@ export default function PostForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     formData.image = imageData;
-    formData.artist = user;
+    formData.artist = authState.user.artistname;
     setSubmitting(true);
     axios.post("/api/posts", formData).then((res) => {
       navigate(`/posts/${res.data._id}`);
@@ -60,7 +48,7 @@ export default function PostForm() {
   };
   return (
     <>
-      {authorized ? (
+      {authState.isAuthenticated ? (
         <div className="dark:bg-black mx-8 drop-shadow-2xl">
           <form
             onSubmit={handleSubmit}

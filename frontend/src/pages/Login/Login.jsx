@@ -14,11 +14,11 @@ export default function Login() {
   const [logging, setLogging] = useState(false);
   const [error, setError] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  const authContext = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
   const handleInputs = (e) => {
     e.preventDefault();
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,20 +35,18 @@ export default function Login() {
       }
       authDispatch({
         type: "LOGIN",
+        user: res.data.user,
         isAuthenticated: true,
       });
-      setCookie("token", res.data.token, { path: "/" }, { sameSite: "none" });
-      setCookie(
-        "user",
-        { name: res.data.user.artistname, isAuthenticated: true },
-        { path: "/" },
-        {
-          sameSite: "none",
-        }
-      );
       navigate(`/profile/${res.data.user.artistname}`);
     });
   };
+
+  useEffect(() => {
+    if (authState.isAuthenticated) {
+      console.log(authState);
+    }
+  }, [authState]);
 
   return (
     <div>

@@ -1,33 +1,45 @@
 import React from "react";
-import { FaPaintBrush } from "react-icons/fa";
+import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useAuthDispatch, useAuthState } from "../../Context/AuthContext";
+import axios from "axios";
+import PostView from "../Posts/PostView";
+import PostForm from "../Posts/PostForm";
+import Posts from "../Posts/Posts";
+import Navbar from "../../components/NavBar/Navbar";
+import Login from "../Login/Login";
+import Register from "../Register/Register";
+import Profile from "../Profile/Profile";
 
 export default function Home() {
+  const authState = useAuthState();
+  const authDispatch = useAuthDispatch();
+
+  useEffect(() => {
+    axios.get("/api/auth/protect").then((res) => {
+      if (res.data.user) {
+        authDispatch({
+          type: "LOGIN",
+          user: res.data.user,
+          isAuthenticated: true,
+        });
+      }
+    });
+  }, []);
   return (
-    <div>
-      <div className="dark:bg-gray-900 text-white min-h-screen p-8">
-        <div className="max-w-5xl mx-auto">
-          <header className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold">
-              <FaPaintBrush className="mr-2 inline-block" />
-              Artistic Hub
-            </h1>
-          </header>
-          <main className="mt-8">
-            <p className="text-lg">
-              Welcome to Artistic Hub, where artists can share their work and
-              get feedback from their peers.
-            </p>
-            <p className="mt-4 text-lg">
-              Here, you can post your artwork and let other artists comment on
-              it. You can also browse the works of other artists and leave your
-              comments.
-            </p>
-          </main>
-          <footer className="mt-8 text-center absolute inset-x-0 bottom-0">
-            <p>&copy; 2023 Artistic Hub. All rights reserved.</p>
-          </footer>
-        </div>
+    <Router>
+      <div className="dark:bg-dark">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/postit" element={<PostForm />} />
+          <Route path="/posts" element={<Posts />} />
+          <Route path="/posts/:id" element={<PostView />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile/:name" element={<Profile />} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }

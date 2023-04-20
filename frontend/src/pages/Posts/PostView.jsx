@@ -2,24 +2,22 @@ import React from "react";
 import CommentSection from "./CommentSection";
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { useAuthState } from "../../Context/AuthContext";
 import axios from "axios";
 
 const Post = () => {
   const params = useParams();
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const authState = useAuthState();
   const [post, setPost] = useState(null);
   const [imageData, setImageData] = useState(null);
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
-  const [authorized, setAuthorized] = useState(false);
-  const user = cookies?.user?.name;
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post(`/api/comments`, {
         comment: newComment,
-        user: user,
+        user: authState.user.artistname,
         postid: params.id,
       })
       .then((res) => {
@@ -45,9 +43,6 @@ const Post = () => {
       );
       setPost(res.data);
       setComments(res.data.comments);
-      axios.get("/api/auth/protect").then((res) => {
-        if (res.data.id != null) setAuthorized(true);
-      });
     });
   }, []);
 
@@ -78,7 +73,7 @@ const Post = () => {
           <CommentSection comments={comments} />
         </div>
         <div className="mt-4">
-          {authorized && (
+          {authState.isAuthenticated && (
             <form className="my-2 shadow-xl" onSubmit={handleSubmit}>
               <div className="w-full mb-4 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-600">
                 <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-700">
