@@ -5,7 +5,7 @@ import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 
 export default function Profile() {
-  const [userData, setUserData] = React.useState({});
+  const [userData, setUserData] = useState({});
   const [owner, setOwner] = useState(false);
   const [removing, setRemoving] = useState(false);
   const params = useParams();
@@ -15,7 +15,7 @@ export default function Profile() {
     axios.get(`/api/users/${userID}`).then((res) => {
       setUserData(res.data);
       axios.get("/api/auth/protect").then((auth) => {
-        if (auth.data.user._id === res.data._id) {
+        if (auth?.data?.user?._id === res.data._id) {
           setOwner(true);
         }
       });
