@@ -66,7 +66,7 @@ const protect = async (req, res) => {
       res.status(401).json({ id: null });
       return;
     }
-    console.log(user);
+
     user.password = "";
     res.status(200).json({ user: user });
   } catch (err) {

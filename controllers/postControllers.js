@@ -82,7 +82,7 @@ const removePost = async (req, res) => {
 
 const getPostIds = async (req, res) => {
   try {
-    const posts = await Post.find({}, { _id: 1 });
+    const posts = await Post.find({}, { _id: 1 }).sort({ updatedAt: -1 });
     res.json(posts);
   } catch (err) {
     res.json({ message: err });

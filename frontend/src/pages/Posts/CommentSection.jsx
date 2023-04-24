@@ -16,7 +16,17 @@ const CommentSection = (props) => {
               className="mb-4 rounded-md dark:bg-gray-800 p-4"
               key={comment._id}
             >
-              <div className="flex items-center mb-2">{comment.comment}</div>
+              <div className="flex items-center mb-2">
+                {comment.comment.length > 100 ? (
+                  <p className="text-gray-500 dark:text-gray-400">
+                    {comment.comment.slice(0, 300)}...
+                  </p>
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400">
+                    {comment.comment}
+                  </p>
+                )}
+              </div>
               <p className="text-gray-500 dark:text-grey-400">{comment.user}</p>
             </li>
           ))

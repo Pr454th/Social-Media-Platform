@@ -10,6 +10,7 @@ import Navbar from "../../components/NavBar/Navbar";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 import Profile from "../Profile/Profile";
+import Pagination from "../../components/Pagination/Paginate";
 
 export default function Home() {
   const authState = useAuthState();
@@ -38,6 +39,7 @@ export default function Home() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile/:name" element={<Profile />} />
+          <Route path="/page" element={<Pagination />} />
         </Routes>
       </div>
     </Router>
