@@ -30,7 +30,6 @@ const loginUser = async (req, res) => {
         res.cookie("token", token, {
           maxAge: 1000 * 60 * 60 * 24 * 14,
           httpOnly: true,
-          sameSite: "strict",
         });
 
         user.password = "";
