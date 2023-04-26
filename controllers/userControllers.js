@@ -49,11 +49,7 @@ const loginUser = async (req, res) => {
 
 const logoutUser = async (req, res) => {
   console.log("logout");
-  res.cookie("token", "", {
-    httpOnly: true,
-    expires: new Date(0),
-    sameSite: "strict",
-  });
+  res.clearCookie("token");
   res.status(200).json({ loggedOut: 1 });
 };
 
