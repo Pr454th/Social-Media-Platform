@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaHome, FaPlus, FaImages, FaUser } from "react-icons/fa";
+import { FaHome, FaPlus, FaImages, FaUser, FaDownload } from "react-icons/fa";
 import { FiLogOut, FiLogIn } from "react-icons/fi";
 import { useAuthState, useAuthDispatch } from "../../Context/AuthContext";
 import axios from "axios";
@@ -57,6 +57,14 @@ const Navbar = () => {
                     <FaPlus className="text-white h-4 w-4" />
                     <span className="ml-2">Create</span>
                   </Link>
+
+                  <Link
+                    to="/download"
+                    className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
+                  >
+                    <FaDownload className="text-white h-4 w-4" />
+                    <span className="ml-2">Download</span>
+                  </Link>
                   <Link
                     to={`/profile/${authState.user.artistname}`}
                     className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
@@ -73,13 +81,22 @@ const Navbar = () => {
                   </button>
                 </>
               ) : (
-                <button
-                  onClick={handleLogin}
-                  className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
-                >
-                  <FiLogIn className="mr-2 h-4 w-4" />
-                  Login
-                </button>
+                <>
+                  <Link
+                    to="/download"
+                    className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
+                  >
+                    <FaDownload className="text-white h-4 w-4" />
+                    <span className="ml-2">Download</span>
+                  </Link>
+                  <button
+                    onClick={handleLogin}
+                    className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
+                  >
+                    <FiLogIn className="mr-2 h-4 w-4" />
+                    Login
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -133,6 +150,14 @@ const Navbar = () => {
                 <FaPlus className="text-white h-4 w-4" />
                 <span className="ml-2">Create</span>
               </Link>
+
+              <Link
+                to="/download"
+                className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
+              >
+                <FaDownload className="text-white h-4 w-4" />
+                <span className="ml-2">Download</span>
+              </Link>
               <Link
                 to={`/profile/${authState.user.artistname}`}
                 className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
@@ -149,13 +174,22 @@ const Navbar = () => {
               </button>
             </>
           ) : (
-            <button
-              onClick={handleLogin}
-              className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
-            >
-              <FiLogIn className="mr-2 h-4 w-4" />
-              Login
-            </button>
+            <>
+              <Link
+                to="/download"
+                className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
+              >
+                <FaDownload className="text-white h-4 w-4" />
+                <span className="ml-2">Download</span>
+              </Link>
+              <button
+                onClick={handleLogin}
+                className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-300"
+              >
+                <FiLogIn className="mr-2 h-4 w-4" />
+                Login
+              </button>
+            </>
           )}
         </div>
       </div>

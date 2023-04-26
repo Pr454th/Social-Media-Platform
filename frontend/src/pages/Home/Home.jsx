@@ -11,6 +11,7 @@ import Login from "../Login/Login";
 import Register from "../Register/Register";
 import Profile from "../Profile/Profile";
 import Pagination from "../../components/Pagination/Paginate";
+import Download from "../Download/Download";
 
 export default function Home() {
   const authState = useAuthState();
@@ -40,6 +41,7 @@ export default function Home() {
           <Route path="/register" element={<Register />} />
           <Route path="/profile/:name" element={<Profile />} />
           <Route path="/page" element={<Pagination />} />
+          <Route path="/download" element={<Download />} />
         </Routes>
       </div>
     </Router>
