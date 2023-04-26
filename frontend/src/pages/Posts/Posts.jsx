@@ -65,7 +65,7 @@ export default function Posts() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-8">
         {posts &&
           posts
-            .slice((activePage - 1) * 5, (activePage - 1) * 5 + 5)
+            .slice((activePage - 1) * 6, (activePage - 1) * 6 + 6)
             .map((post) => (
               <Link to={`/posts/${post._id}`} key={post._id}>
                 <div className="card p-4 bg-white rounded-lg shadow-md drop-shadow-2xl dark:bg-gray-800 dark:text-white m-4">
@@ -89,10 +89,10 @@ export default function Posts() {
       <div className="flex justify-center text-white">
         <Paginate
           activePage={activePage}
-          itemsCountPerPage={5}
+          itemsCountPerPage={6}
           totalItemsCount={posts.length}
           handlePageChange={handlePageChange}
-          pageCount={Math.ceil(posts.length / 5)}
+          pageCount={Math.ceil(posts.length / 6)}
         />
       </div>
     </>
